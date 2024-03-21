@@ -1,0 +1,127 @@
+You will be provided with partial information about given pdf document. You will have access to the detected structured blocks on the page. Each structured block is represented by `(x0, y0, x1, y1)`, where `(x0, y0)` are the starting coordinates of the block's bounding box and `(x1, y1)` are the ending coordinates.  You will be also informed if the block is an image by specifying "IMG w: width, h: height , size:number of bytes" comment, specifying it's dimensions and size. Additionally, you'll be given total number of images and detected drawings in the documented. It is important to infer the presence of any tables, as it makes parsing pipeline more difficult. Take into account visual content, drawings, as they also can complicate the pipeline. 
+
+You need to estimate the difficulty of extracting textual information from the given document and the complexity of the parsing solution. Provide a score from 0 to 1. 
+
+Examples: 
+
+(58,52,426,62) 
+(58,77,426,118) 
+(58,118,426,176) 
+(74,186,374,196) 
+(74,206,426,228) 
+(74,229,426,267) 
+(74,268,426,292) 
+(58,301,426,335) 
+(320,354,387,362) 
+(346,363,365,382) 
+(278,367,296,386) 
+(72,377,88,387) 
+(350,398,416,406) 
+(73,410,91,418) 
+(325,420,409,428) 
+(74,441,91,449) 
+(65,470,92,479) 
+(368,506,379,517) 
+(96,506,299,518) 
+(69,533,415,553) 
+(58,597,71,605) 
+ IMG: 0 DRAW: 14
+ # We have irregular textual blocks, which might indicate figure which is parsed as text, drawing which might indicate some sort of scientific notation 
+ 0.75
+
+(45,23,159,33) 
+(72,58,537,178) 
+(72,186,535,252) 
+(72,259,539,366) 
+(78,386,189,399) 
+(78,417,246,432) 
+(78,438,533,559) 
+(72,758,187,768) 
+ IMG: 0 DRAW: 16
+# Nicely organized textual blocks 
+0.3
+
+(439,24,583,33) 
+(97,65,369,76) 
+(78,97,141,121) 
+(155,91,533,127) 
+(78,141,142,165) 
+(155,141,527,165) 
+(78,179,511,203) 
+(78,217,141,241) 
+(155,217,512,241) 
+(78,255,409,280) 
+(155,306,507,318) 
+(78,293,140,330) 
+(155,350,529,374) 
+(78,344,140,381) 
+(78,394,137,419) 
+(155,394,529,419) 
+(78,433,531,457) 
+(72,471,121,483) 
+(72,491,538,730) 
+ IMG: 0 DRAW: 13
+ # Blocks indicate the presence of table, so the ordering of rows columns might not be preserved during parsing 
+ 0.65
+
+
+(56,37,206,48) 
+(61,61,479,72) 
+(61,93,223,136) 
+(237,93,391,136) 
+(402,82,547,147) 
+(237,168,380,211) 
+(61,162,227,217) 
+(402,157,544,222) 
+(61,232,229,297) 
+(237,232,387,297) 
+(402,232,551,297) 
+(56,329,310,349) 
+(56,373,59,385) 
+(56,400,353,412) 
+(67,414,440,629) IMG w:1769 h:1019 size:105739 r_x: 96 r_y: 96
+(56,647,59,659) 
+(56,674,558,733)
+IMG: 1 DRAW: 12
+# Table is present, so the question of informational flow arises 
+0.65
+
+(56,59,333,82) 
+(56,142,246,247) 
+(299,742,312,755) 
+ IMG: 0 DRAW: 1
+ # Simple layout, header and some description of chapters 
+ 0.15
+
+(57,52,426,62) 
+(57,77,426,230) 
+(132,245,362,265) 
+(269,263,274,271) 
+(275,267,280,272) 
+(89,301,305,311) 
+(244,319,256,328) 
+(145,326,157,335) 
+(227,330,364,339) 
+(269,337,274,345) 
+(274,341,279,346) 
+(102,349,112,358) 
+(175,352,182,361) 
+(128,367,135,376) 
+(90,374,307,383) 
+(68,395,415,460) 
+(57,477,158,487) 
+(57,493,426,564) 
+(319,545,359,566) 
+(359,545,396,582) 
+(392,545,426,582) 
+(57,565,426,587) 
+(412,597,425,605) 
+ IMG: 0 DRAW: 119
+ # Seem to be a text with multiple chaotic text blocks, probably signifying diagram which was not given as an image but rather as a text, potential presence of scientific notation 
+ 0.75
+
+Using your knowledge and based on the proposed examples give score to the following layout. Give only score and no extra comments. 
+
+```
+{layout}
+```
