@@ -1,0 +1,10 @@
+anthropic==0.21.1
+langchain==0.1.4
+langchain-community==0.0.16
+langchain-core==0.1.17
+langchain-openai==0.0.5
+langchainplus-sdk==0.0.19
+numpy==1.26.3
+openai==1.12.0
+openapi-schema-pydantic==1.2.4
+PyMuPDF==1.22.5

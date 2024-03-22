@@ -11,3 +11,4 @@ def get_env_variable(var_name):
     if value is None:
         raise EnvironmentError(f"Environment variable '{var_name}' not set.")
     return value
+

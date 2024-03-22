@@ -1,1 +1,1 @@
-# PDF pipeline for creating training corpora (mainly for llm, multimodal and alignment horizontals)
+# Repo for PDF parsing pipeline
