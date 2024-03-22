@@ -159,7 +159,7 @@ class PDFLLMParser:
                      file_name = file.parts[-3]
                      page_number = file.parts[-1].split('.')[0]
                      score = float(file.read_text())
-                     array.append([file, file_name, page_number, score])
+                     array.append([file, str(file_name), page_number, score])
                 except Exception as e:
                     print(f"Fail extracting score for {file}")
             data = pd.DataFrame(array, columns=["file_path", "file_name", "page_number", "score"])
@@ -169,24 +169,27 @@ class PDFLLMParser:
     def parse_pdfs(self, metadata, threshold = 0.5, is_greater=False):
         """Filters and parses PDFs based on complexity scores, organizing output into directories based on complexity level."""
         
-        data = pd.read_csv(metadata)
+        data = pd.read_csv(metadata, dtype={"file_name": str})
         flag = "complex" if is_greater else "easy" 
         if is_greater:
             filtered_pds = data[data.score > threshold]
         else: 
             filtered_pds = data[data.score <= threshold]
-
-        for i, row in tqdm(filtered_pds.iterrows(), total = len(filtered_pds)):
-            file_name = self.directory/(str(row.file_name+'.pdf'))
-            assert(file_name.exists())
-            page_number = row.page_number
-            with open_document(file_name) as file:
-                page = file[page_number-1]
-                text, formatting_lines = self.retreiver.retreive_text_remove_formatting(page)
-                write_dir = (((self.write_path/row.file_name)/"parsed_text")/flag)
-                write_dir.mkdir(exist_ok=True, parents=True)
-                write_path = write_dir/f"page_{page_number}.txt"
-                write_path.exists()
-                text_to_write = text + "\n\n\n ### Formatting lines ### \n\n\n"+ formatting_lines
-                write_path.write_text(text_to_write)
+        write_dir = None
+        if len(filtered_pds):
+            for i, row in tqdm(filtered_pds.iterrows(), total = len(filtered_pds)):
+                file_name = self.directory/(str(row.file_name)+'.pdf')
+                assert(file_name.exists())
+                page_number = row.page_number
+                with open_document(file_name) as file:
+                    page = file[page_number-1]
+                    text, formatting_lines = self.retreiver.retreive_text_remove_formatting(page)
+                    write_dir = (((self.write_path/row.file_name)/"parsed_text")/flag)
+                    write_dir.mkdir(exist_ok=True, parents=True)
+                    write_path = write_dir/f"page_{page_number}.txt"
+                    text_to_write = text + "\n\n\n ### Formatting lines ### \n\n\n"+ formatting_lines
+                    write_path.write_text(text_to_write)
+        else:
+            print("No rows with given threshold")
+            return None
         return write_dir 
