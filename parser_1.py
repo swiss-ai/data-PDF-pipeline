@@ -193,3 +193,106 @@ class PDFLLMParser:
             print("No rows with given threshold")
             return None
         return write_dir 
+
+    def analyze_to_dict(self, pdf_path, results_dict):
+        """
+        Analyzes a specified PDF file, adding the complexity score for each page to the given dictionary.
+        
+        Parameters:
+        - pdf_path: Path to the PDF file to be analyzed.
+        - results_dict: Dictionary to which the results will be added. Keys are 'pdfname_pdfpage',
+        and values are the complexity scores.
+        """
+        path = pathlib.Path(pdf_path)
+        pdf_name = path.stem  # Gets the file name without the extension
+
+        for i, input_page in enumerate(self._get_input_for_llm(pdf_path), start=1):
+            try:
+                complexity_score = self.llm_callback(input_page)
+                key = f"{pdf_name}_{i}"
+                if key not in results_dict:
+                    results_dict[key] = {}
+                results_dict[key]['complexity'] = complexity_score
+            except Exception as e:
+                print(f"Error processing page {i} of {pdf_name}: {e}")
+        return results_dict
+    
+    def latex_to_dict(self, pdf_path, results_dict):
+        """
+        Analyzes a specified PDF file, counting LaTeX instances on each page based on non-ASCII characters.
+        Adds the count to the given dictionary with keys formatted as 'pdfname_pdfpage_latex'.
+
+        Parameters:
+        - pdf_path: Path to the PDF file to be analyzed.
+        - results_dict: Dictionary to which the LaTeX counts will be added.
+        """
+        doc = fitz.open(pdf_path)
+        pdf_name = pathlib.Path(pdf_path).stem
+
+        non_ascii_pattern = re.compile(r'[^\x00-\x7F]+')
+        for page_num, page in enumerate(doc, start=1):
+            text = page.get_text()
+            latex_count = len(non_ascii_pattern.findall(text))
+            key = f"{pdf_name}_{page_num}"
+            if key not in results_dict:
+                results_dict[key] = {}
+            results_dict[key]['latex_count'] = latex_count
+
+        doc.close()
+        return results_dict
+    
+    def images_to_dict(self, pdf_path, results_dict):
+        """
+        Analyzes a specified PDF file, counting the number of images on each page.
+        Adds the count to the given dictionary with keys formatted as 'pdfname_pdfpage'.
+
+        Parameters:
+        - pdf_path: Path to the PDF file to be analyzed.
+        - results_dict: Dictionary to which the image counts will be added.
+        """
+        doc = fitz.open(pdf_path)
+        pdf_name = pathlib.Path(pdf_path).stem
+
+        for page_num, page in enumerate(doc, start=1):
+            image_list = page.get_images(full=True)  # Get list of images on the page
+            image_count = len(image_list)  # Count of images
+
+            key = f"{pdf_name}_{page_num}"
+            if key not in results_dict:
+                results_dict[key] = {}
+            results_dict[key]['image_count'] = image_count
+
+        doc.close()
+        return results_dict
+    
+    def error_count(self, text):
+        """
+        Counts all instances in the text that are not readable characters such as
+        letters, common punctuation, apostrophes, etc.
+        """
+        # Adjust the pattern as needed
+        pattern = re.compile(r'[^a-zA-Z0-9\s.,;:\'\"?!-–—“”‘’]+')
+        return len(pattern.findall(text))
+
+    def errors_to_dict(self, pdf_path, results_dict):
+        """
+        Analyzes a specified PDF file, counting instances of unreadable characters on each page.
+        Adds the count to the given dictionary with keys formatted as 'pdfname_pdfpage'.
+
+        Parameters:
+        - pdf_path: Path to the PDF file to be analyzed.
+        - results_dict: Dictionary to which the error counts will be added.
+        """
+        doc = fitz.open(pdf_path)
+        pdf_name = pathlib.Path(pdf_path).stem
+
+        for page_num, page in enumerate(doc, start=1):
+            text = page.get_text()
+            error_count = self.error_count(text)
+            key = f"{pdf_name}_{page_num}"
+            if key not in results_dict:
+                results_dict[key] = {}
+            results_dict[key]['error_count'] = error_count
+
+        doc.close()
+        return results_dict
