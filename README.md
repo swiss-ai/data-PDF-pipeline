@@ -12,6 +12,6 @@ Currently there are two ways implemented to estimate complexity of the pdf docum
 - Light-weight visual/textual models (trained for latex and table detection from visual/textual signal) (whole pipeline around 30 pages per second on GPU)
 
 To perform llm-based inference consult `notebooks/Example_llm.ipynb`
-For the light-weight, scalable annotation, download checkpoints of the models from https://drive.google.com/file/d/1cQCvW4JdETfO55zVvq6m5vEnDPaTwWzn/
+\nFor the light-weight, scalable annotation, download checkpoints of the models from https://drive.google.com/file/d/1cQCvW4JdETfO55zVvq6m5vEnDPaTwWzn/
 and run script `infer_structure.py`
 
