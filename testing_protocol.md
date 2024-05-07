@@ -7,7 +7,7 @@ Explore the patterns between the layouts (bounding boxes detected) and the abili
 In the metadata would be nice to add regex for latex.
 Also by inspecting different documents contemplate on the extraction of formatting lines (like page number, foot notes, which are not relevant to the content). 
 
-There is an example of use case in **./Example.ipynb**
+There is an example of use case in **./notesboks/Example_llm.ipynb**
 
 Feel free to create a new prompt, remove/add examples, add new metadata to the prompt. 
 
