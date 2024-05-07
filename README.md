@@ -1,6 +1,6 @@
 # Repo for PDF parsing pipeline
 
-Suggested methodology, estimate presence of scientific content or table on the pdf page (as these are the major reasons why simple parsers might result in corrupted data), and route the parsing to the appropriate tool. 
+Suggested methodology: estimate presence of scientific content (LaTeX) or tables on the pdf page (as these are the major reasons why simple parsers might result in a corrupted data), and route the parsing to the appropriate tool. 
 Suggested tools for simple layouts:
 - PyMuPDF, etc. (40 ms processing per page)
 Suggested tools for complex layouts:
