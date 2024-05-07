@@ -3,7 +3,7 @@ import fitz
 import re
 from contextlib import contextmanager
 
-from text_processing import get_text_from_blocks, blocks_by_id, blocks_to_text, round_coord, get_blocks_rounded, blocks_to_df, prompt_lines
+from .text_processing import get_text_from_blocks, blocks_by_id, blocks_to_text, round_coord, get_blocks_rounded, blocks_to_df, prompt_lines
 
 area = lambda box: (box[3]-box[1])*(box[2]-box[0])
 

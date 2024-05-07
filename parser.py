@@ -5,7 +5,7 @@ import sys
 import pandas as pd
 from tqdm import tqdm
 
-from pdf_processing import *
+from llm_processing.pdf_processing import *
 
 
 class SimpleTextRetreiver:
