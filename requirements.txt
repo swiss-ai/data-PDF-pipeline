@@ -8,3 +8,8 @@ numpy==1.26.3
 openai==1.12.0
 openapi-schema-pydantic==1.2.4
 PyMuPDF==1.22.5
+langdetect==1.0.9
+torch>=2.1.0
+fasttext==0.9.2
+pandas
+tqdm
