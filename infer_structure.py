@@ -35,7 +35,7 @@ def prepare_dataset(pdf_files, output_dir, num_workers=None):
     
     with Pool(num_workers) as pool:
         results = pool.map(processing_func, pdf_files)
-    
+
     results = [item for item in results if item]  # Filter out any None results
 
     return results
@@ -101,7 +101,10 @@ def main(input_dir, output_dir, batch_size, model1_path, model2_path, fast_text_
     output_file (str): Name of the output CSV file where results will be stored.
     """
     print("Preparing pdf dataset\n")
-    all_files = list(pathlib.Path(input_dir).glob("*.pdf"))
+    all_files = list(pathlib.Path(input_dir).rglob("*.pdf"))
+    if not len(all_files):
+        print("No pdf files detected\n")
+        return
     results = prepare_dataset(all_files, output_dir)
     dataset = PairedImageDataset(results)
     print(f"{len(results)} file preprocessed")
